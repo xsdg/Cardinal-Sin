@@ -18,7 +18,7 @@ ICON_SIZE = 240
 # hash is a hash of the canonical path
 store = Gtk::ListStore.new(Integer, Set, Pathname, String, Gdk::Pixbuf)
 
-c = CSTK::HScrolledIconView.new(store)
+real_tmp_set = CSTK::HScrolledIconView.new(store)
 
 IMAGE_DIR.children.sort.each {
     |img|
@@ -46,15 +46,16 @@ IMAGE_DIR.children.sort.each {
     end
     }
 
-button = Gtk::Button.new("Hello World")
-
 tmp_set = Gtk::IconView.new(store)
 tmp_set.pixbuf_column = 4
 tmp_set.text_column = 3
 
+sw = Gtk::ScrolledWindow.new
+sw.add_with_viewport(tmp_set)
+
 tmp = Gtk::VPaned.new
-tmp.add1(tmp_set)
-tmp.add2(button)
+tmp.add1(real_tmp_set)
+tmp.add2(sw)
 
 window = Gtk::Window.new
 
