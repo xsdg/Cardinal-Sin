@@ -11,24 +11,43 @@ require 'pathname'
 require 'set'
 
 IMAGE_DIR = Pathname.new('images/')
+ICON_SIZE = 240
 
-# store [hash, sets, path, image]
+# store [hash, sets, path, filename/title, image]
 # hash is a hash of the canonical path
-store = Gtk::ListStore.new(Integer, Set, Pathname, Gdk::Pixbuf)
+store = Gtk::ListStore.new(Integer, Set, Pathname, String, Gdk::Pixbuf)
 
 IMAGE_DIR.children.each {
     |img|
+    begin
+        pixbuf = Gdk::Pixbuf.new(img.to_s)
+
+        rescue Gdk::PixbufError
+        # probably wasn't an image; skip it
+        next
+    end
+
     iter = store.append
     iter[0] = img.realpath.hash
     iter[1] = Set.new
     iter[2] = img
-    iter[3] = Gdk::Pixbuf.new(img.to_s)
+    iter[3] = img.basename
+    w = pixbuf.width
+    h = pixbuf.height
+    if(w > h)
+        # landscape orientation
+        iter[4] = pixbuf.scale(ICON_SIZE, h*ICON_SIZE/w)
+    else
+        # portrait or square
+        iter[4] = pixbuf.scale(w*ICON_SIZE/h, ICON_SIZE)
+    end
     }
 
 button = Gtk::Button.new("Hello World")
 
 tmp_set = Gtk::IconView.new(store)
-tmp_set.pixbuf_column = 3
+tmp_set.pixbuf_column = 4
+tmp_set.text_column = 3
 
 tmp = Gtk::VPaned.new
 tmp.add1(tmp_set)
