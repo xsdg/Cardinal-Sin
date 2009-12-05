@@ -28,7 +28,8 @@ So, for instance:
 
 
 
-My original brainstorm for the project started off as an email, which I include below.
+My original brainstorm for the project started off as an email, which I include
+below.
 
 Note: this is as much a brainstorming email as it is a solicitation
 for ideas, so it's long and a bit rambly and probably convoluted too.
@@ -41,51 +42,109 @@ to think of ways to implement it.)
 Any thoughts or ideas or feedback would be appreciated :o)
 
 
-So, I've been hacking on geeqie[1] for the past couple days, and now I'm thinking of cool things to do that would improve my ability to find images. And really, all I ever want to do is find images. For
-instance, the only reason I rate images is so I can find the good ones, or the mediocre ones, or the bad ones.
+So, I've been hacking on geeqie[1] for the past couple days, and now I'm
+thinking of cool things to do that would improve my ability to find images. And
+really, all I ever want to do is find images. For instance, the only reason I
+rate images is so I can find the good ones, or the mediocre ones, or the bad
+ones.
 
-One disconnect I've found between the way I think and the way that geeqie behaves can be described like this: I like to think about sets of photos. The sets only exist insofar as the elements share some
-common property.
+One disconnect I've found between the way I think and the way that geeqie
+behaves can be described like this: I like to think about sets of photos. The
+sets only exist insofar as the elements share some common property.
 
 
 ### THEORY ###
-Let's say this: A photo is defined as a singleton set containing a photo. A set contains zero or more sets. Furthermore, a set only exists if I am thinking about it.
-So if I'm not thinking about a set, it doesn't need to exist, and thus stops existing. If I start thinking about a set, it pops into existence. The important thing here isn't really the existence of a set, but rather the property that is shared by the elements of the set. Sets whose elements have useful shared properties will tend to be more useful, and so they'll tend to exist. Useless sets (*cough* the set of sets that don't contain themselves) aren't actually useful, so people won't think about them.
+Let's say this: A photo is defined as a singleton set containing a photo. A set
+contains zero or more sets. Furthermore, a set only exists if I am thinking
+about it.
 
-So a "shoot" can be considered a set of photos. A "burst" of photos is a set — the photos are similar and/or were taken in rapid succession. Of course, there are different reasons why a "burst" of photos might be considered a set, and as such, there might be a number of overlapping sets related to that burst. For one, a burst is a set simply because the photos were taken in rapid succession. They might also be a set because they were taken with the same intention.
-Important subsets might be "images with interesting facial expressions," or "images that form a semantic sequence — an animation".
+So if I'm not thinking about a set, it doesn't need to exist, and thus stops
+existing. If I start thinking about a set, it pops into existence. The important
+thing here isn't really the existence of a set, but rather the property that is
+shared by the elements of the set. Sets whose elements have useful shared
+properties will tend to be more useful, and so they'll tend to exist. Useless
+sets (*cough* the set of sets that don't contain themselves) aren't actually
+useful, so people won't think about them.
 
-Similarly, keywords or other properties define other sets. "Photos taken near the Googleplex," "photos of Carlos Santana," "photos that are mostly dark," "photos that are much wider than they are tall — panoramas".
+So a "shoot" can be considered a set of photos. A "burst" of photos is a set —
+the photos are similar and/or were taken in rapid succession. Of course, there
+are different reasons why a "burst" of photos might be considered a set, and as
+such, there might be a number of overlapping sets related to that burst. For
+one, a burst is a set simply because the photos were taken in rapid succession.
+They might also be a set because they were taken with the same intention.
+
+Important subsets might be "images with interesting facial expressions," or
+"images that form a semantic sequence — an animation".
+
+Similarly, keywords or other properties define other sets. "Photos taken near
+the Googleplex," "photos of Carlos Santana," "photos that are mostly dark,"
+"photos that are much wider than they are tall — panoramas".
 
 
 There exist partial orders on most sets:
-- Not all photos are comparable — it can be difficult to tell whether a portrait or a landscape is "better" on any sort of absolute scale.
-- However, in many useful sets, most of the photos will be somewhat comparable. In some sets, the partial order may be a total order (for instance, "which of the shots from this burst is the sharpest?").
-- Because partial orders exist across sets, this means that partial orders may exist across sets of photos. This is useful when thinking about questions like "which images will go in my next exhibition?" "Which images should I submit to the newspaper for this photo essay?" "Which images should I send to the photo forum for critique?" The ranking scheme in such cases likely includes not only how good the individual photos are, but also (respectively) how well the photos work together; how representative they are, as a group, of the thing that was documented; or how representative they are of all the photos taken during a shoot.
+- Not all photos are comparable — it can be difficult to tell whether a portrait
+  or a landscape is "better" on any sort of absolute scale.
+- However, in many useful sets, most of the photos will be somewhat comparable.
+  In some sets, the partial order may be a total order (for instance, "which of
+  the shots from this burst is the sharpest?").
+- Because partial orders exist across sets, this means that partial orders may
+  exist across sets of photos. This is useful when thinking about questions like
+  "which images will go in my next exhibition?" "Which images should I submit to
+  the newspaper for this photo essay?" "Which images should I send to the photo
+  forum for critique?" The ranking scheme in such cases likely includes not only
+  how good the individual photos are, but also (respectively) how well the
+  photos work together; how representative they are, as a group, of the thing
+  that was documented; or how representative they are of all the photos taken
+  during a shoot.
 
 
-So, at this point, we've got a very hand-wavy system that allows us to think intuitively about photos:
+So, at this point, we've got a very hand-wavy system that allows us to think
+intuitively about photos:
 1) There exist photos
-2) There exist natural groups of photos (it's not important yet that the natural groups can't really be well-defined or enumerated)
-3) The natural groups of photos overlap in all sorts of different ways. Different natural groups may be useful for different reasons.
-4) There may exist ways to compare some of these natural groups (this statement is the ultimate in hand-waviness ;o)
+2) There exist natural groups of photos (it's not important yet that the natural
+   groups can't really be well-defined or enumerated)
+3) The natural groups of photos overlap in all sorts of different ways.
+   Different natural groups may be useful for different reasons.
+4) There may exist ways to compare some of these natural groups (this statement
+   is the ultimate in hand-waviness ;o)
 
 
 ### IMPLEMENTATION ###
-This system, as described, cannot be implemented. So the goal isn't to implement the system as described, but to implement something similar that provides most of the benefits.
+This system, as described, cannot be implemented. So the goal isn't to implement
+the system as described, but to implement something similar that provides most
+of the benefits.
+
 Here are some challenges:
-- The sets are nebulous — they should only exist insofar as we're interested in something. Sets that we're not interested in, that aren't useful, should not exist.
-- The implementation and the user need some way to communicate about and to refer to these sets. Even if the implementation knows about a particular set, that's not useful unless the user can communicate a reference to that set and have the implementation find/show it.
+- The sets are nebulous — they should only exist insofar as we're interested in
+  something. Sets that we're not interested in, that aren't useful, should not
+  exist.
+- The implementation and the user need some way to communicate about and to
+  refer to these sets. Even if the implementation knows about a particular set,
+  that's not useful unless the user can communicate a reference to that set and
+  have the implementation find/show it.
 
 Here are some ideas:
-- Some of these sets can be inferred: similar images from a burst will (in most cases) be consecutive (or nearly-so), and will have been taken in a constrained period of time.
-- "shoots" can often be inferred from the data storage scheme (directories on a filesystem), or from other info (all of the photos were imported at the same time, for example). Even if these inferences are wrong, it shouldn't be too difficult to fix them manually if you can split or join "shoot" sets.
-- Join sets by making them subsets of a common superset — the signals that led to the inference may be useful for other things, even if they weren't directly useful for inferring the "shoot" set
-- In many cases, it's probably easy enough to make sets exist or not exist by doing tricks with data structures (in C, pointers come to mind)
-- If the user selects multiple photos for any reason, that selection should become a set. If it turns out that the set isn't useful, the implementation should be able to infer that. It's better to err on the side of too-many sets, as long as there are good ways to deal with too-many sets, such as some sort of LRU or LFU[2] scheme.
+- Some of these sets can be inferred: similar images from a burst will (in most
+  cases) be consecutive (or nearly-so), and will have been taken in a
+  constrained period of time.
+- "shoots" can often be inferred from the data storage scheme (directories on a
+  filesystem), or from other info (all of the photos were imported at the same
+  time, for example). Even if these inferences are wrong, it shouldn't be too 
+  difficult to fix them manually if you can split or join "shoot" sets.
+- Join sets by making them subsets of a common superset — the signals that led
+  to the inference may be useful for other things, even if they weren't directly
+  useful for inferring the "shoot" set
+- In many cases, it's probably easy enough to make sets exist or not exist by
+  doing tricks with data structures (in C, pointers come to mind)
+- If the user selects multiple photos for any reason, that selection should
+  become a set. If it turns out that the set isn't useful, the implementation
+  should be able to infer that. It's better to err on the side of too-many sets,
+  as long as there are good ways to deal with too-many sets, such as some sort
+  of LRU or LFU[2] scheme.
 
 
 --xsdg
 
 [1] http://geeqie.sourceforge.net/
 [2] http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used
+
