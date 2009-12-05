@@ -9,6 +9,7 @@
 require 'gtk2'
 require 'pathname'
 require 'set'
+require 'set_view'
 
 IMAGE_DIR = Pathname.new('images/')
 ICON_SIZE = 240
@@ -17,7 +18,9 @@ ICON_SIZE = 240
 # hash is a hash of the canonical path
 store = Gtk::ListStore.new(Integer, Set, Pathname, String, Gdk::Pixbuf)
 
-IMAGE_DIR.children.each {
+c = CSTK::HScrolledIconView.new(store)
+
+IMAGE_DIR.children.sort.each {
     |img|
     begin
         pixbuf = Gdk::Pixbuf.new(img.to_s)
