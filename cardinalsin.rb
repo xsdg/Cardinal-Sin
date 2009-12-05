@@ -55,8 +55,9 @@ tmp.add2(button)
 
 window = Gtk::Window.new
 
-window.set_title "Cardinal Sin"
+window.title = "Cardinal Sin"
 window.set_size_request(640, 480)
+window.border_width = 10
 window.signal_connect("destroy") {
     Gtk.main_quit
     }
