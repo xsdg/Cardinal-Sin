@@ -7,12 +7,32 @@
 # This software comes with no warranty of any kind, use at your own risk!
 
 require 'gtk2'
+require 'pathname'
+require 'set'
+
+IMAGE_DIR = Pathname.new('images/')
+
+# store [hash, sets, path, image]
+# hash is a hash of the canonical path
+store = Gtk::ListStore.new(Integer, Set, Pathname, Gdk::Pixbuf)
+
+IMAGE_DIR.children.each {
+    |img|
+    iter = store.append
+    iter[0] = img.realpath.hash
+    iter[1] = Set.new
+    iter[2] = img
+    iter[3] = Gdk::Pixbuf.new(img.to_s)
+    }
 
 button = Gtk::Button.new("Hello World")
-button2 = Gtk::Button.new("Howdy")
+
+tmp_set = Gtk::IconView.new(store)
+tmp_set.pixbuf_column = 3
+
 tmp = Gtk::VPaned.new
-tmp.add1(button)
-tmp.add2(button2)
+tmp.add1(tmp_set)
+tmp.add2(button)
 
 window = Gtk::Window.new
 
