@@ -21,10 +21,11 @@ module CSTK
             @text_column = nil
             @children = {}
 
-            viewport = Gtk::Viewport.new(self.hadjustment, self.vadjustment)
             @box = Gtk::HBox.new
+            viewport = Gtk::Viewport.new(self.hadjustment, self.vadjustment)
             viewport.add(@box)
             self.add(viewport)
+            self.vscrollbar_policy=Gtk::POLICY_NEVER
 
             model_sigs = %w{row-inserted row-deleted row-has-child-toggled
                             row-changed rows-reordered}
@@ -57,10 +58,10 @@ module CSTK
         def handle_model_signal(signal, model, path, iter)
             case signal
                 when 'row-inserted'
-                    puts "Got row-inserted signal with iter #{iter}"
+                    #puts "Got row-inserted signal with iter #{iter}"
                     insert_elem(model, path, iter)
                 when 'row-changed'
-                    puts "Got row-changed signal with iter #{iter}"
+                    #puts "Got row-changed signal with iter #{iter}"
                     modify_elem(model, path, iter)
                 else
                     puts "Got unhandled tree model signal #{signal}"
@@ -71,7 +72,6 @@ module CSTK
             return if @pixbuf_column.nil?
 
             sep = Gtk::VSeparator.new
-            p [iter, iter[0], iter[1], iter[2], iter[3], iter[4]]
 
             siter = iter.to_s
             item = IconViewItem.new(iter[@pixbuf_column], siter)
@@ -82,8 +82,6 @@ module CSTK
 
         def modify_elem(model, path, iter)
             return if @pixbuf_column.nil?
-
-            p [iter, iter[0], iter[1], iter[2], iter[3], iter[4]]
 
             if(not iter[4].nil?)
                 puts "Setting pixbuf for child #{iter.to_s} to #{iter[4].inspect}"
