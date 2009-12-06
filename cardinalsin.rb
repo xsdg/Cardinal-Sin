@@ -19,6 +19,7 @@ ICON_SIZE = 240
 store = Gtk::ListStore.new(Integer, Set, Pathname, String, Gdk::Pixbuf)
 
 real_tmp_set = CSTK::HScrolledIconView.new(store)
+real_tmp_set.pixbuf_column = 4
 
 IMAGE_DIR.children.sort.each {
     |img|

@@ -12,8 +12,6 @@ require 'gtk2'
 
 module CSTK
     class HScrolledIconView < Gtk::ScrolledWindow
-#        include Gtk::CellLayout
-
         attr_reader :pixbuf_column, :text_column
 
         def initialize(model)
@@ -25,6 +23,7 @@ module CSTK
             viewport = Gtk::Viewport.new(self.hadjustment, self.vadjustment)
             @box = Gtk::HBox.new
             viewport.add(@box)
+            @box.add(Gtk::Button.new("Hello, world!"))
 
             model_sigs = %w{row-inserted row-deleted row-has-child-toggled
                             row-changed rows-reordered}
@@ -47,10 +46,16 @@ module CSTK
         end
 
         private
+        class IconViewItem
+            def initialize
+            end
+        end
+
         def handle_model_signal(signal, model, path, iter)
             case signal
                 when 'row-inserted'
                     puts "Got row-inserted signal with iter #{iter}"
+                    insert_elem(model, path, iter)
                 when 'row-changed'
                     puts "Got row-changed signal with iter #{iter}"
                 else
@@ -58,8 +63,15 @@ module CSTK
             end
         end
 
-        def insert_row(*args)
-            sep = nil
+        def insert_elem(model, path, iter)
+            return if @pixbuf_column.nil?
+
+            sep = Gtk::VSeparator.new
+            img = Gtk::Image.new(iter[@pixbuf_column])
+            sep.show
+            img.show
+            @box.add(img)
+            @box.add(sep)
         end
     end
 end
