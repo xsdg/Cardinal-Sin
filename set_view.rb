@@ -23,7 +23,7 @@ module CSTK
             viewport = Gtk::Viewport.new(self.hadjustment, self.vadjustment)
             @box = Gtk::HBox.new
             viewport.add(@box)
-            @box.add(Gtk::Button.new("Hello, world!"))
+            self.add(viewport)
 
             model_sigs = %w{row-inserted row-deleted row-has-child-toggled
                             row-changed rows-reordered}
@@ -68,8 +68,6 @@ module CSTK
 
             sep = Gtk::VSeparator.new
             img = Gtk::Image.new(iter[@pixbuf_column])
-            sep.show
-            img.show
             @box.add(img)
             @box.add(sep)
         end
