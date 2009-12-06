@@ -19,7 +19,7 @@ ICON_SIZE = 240
 store = Gtk::ListStore.new(Integer, Set, Pathname, String, Gdk::Pixbuf)
 
 real_tmp_set = CSTK::HScrolledIconView.new(store)
-real_tmp_set.pixbuf_column = 4
+real_tmp_set.pixbuf_column = 3
 
 IMAGE_DIR.children.sort.each {
     |img|
@@ -51,8 +51,15 @@ tmp_set = Gtk::IconView.new(store)
 tmp_set.pixbuf_column = 4
 tmp_set.text_column = 3
 
+#puts "Width: " + tmp_set.width_request.to_s
+#puts "Height: " + tmp_set.height_request.to_s
+#tmp_set.width_request = 320
+#puts "Width: " + tmp_set.width_request.to_s
+#puts "Height: " + tmp_set.height_request.to_s
+
 sw = Gtk::ScrolledWindow.new
 sw.add_with_viewport(tmp_set)
+sw.vscrollbar_policy=Gtk::POLICY_NEVER
 
 tmp = Gtk::VPaned.new
 tmp.add1(real_tmp_set)

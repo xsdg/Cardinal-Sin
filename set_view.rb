@@ -19,6 +19,7 @@ module CSTK
             @model = model
             @pixbuf_column = nil
             @text_column = nil
+            @children = {}
 
             viewport = Gtk::Viewport.new(self.hadjustment, self.vadjustment)
             @box = Gtk::HBox.new
@@ -46,8 +47,10 @@ module CSTK
         end
 
         private
-        class IconViewItem
-            def initialize
+        class IconViewItem < Gtk::Image
+            def initialize(pixbuf, position)
+                @position = position
+                super(pixbuf)
             end
         end
 
@@ -58,6 +61,7 @@ module CSTK
                     insert_elem(model, path, iter)
                 when 'row-changed'
                     puts "Got row-changed signal with iter #{iter}"
+                    modify_elem(model, path, iter)
                 else
                     puts "Got unhandled tree model signal #{signal}"
             end
@@ -67,9 +71,25 @@ module CSTK
             return if @pixbuf_column.nil?
 
             sep = Gtk::VSeparator.new
-            img = Gtk::Image.new(iter[@pixbuf_column])
-            @box.add(img)
+            p [iter, iter[0], iter[1], iter[2], iter[3], iter[4]]
+
+            siter = iter.to_s
+            item = IconViewItem.new(iter[@pixbuf_column], siter)
+            @box.add(item)
             @box.add(sep)
+            @children[siter] = item
         end
+
+        def modify_elem(model, path, iter)
+            return if @pixbuf_column.nil?
+
+            p [iter, iter[0], iter[1], iter[2], iter[3], iter[4]]
+
+            if(not iter[4].nil?)
+                puts "Setting pixbuf for child #{iter.to_s} to #{iter[4].inspect}"
+                @children[iter.to_s].pixbuf = iter[4]
+            end
+        end
+
     end
 end
