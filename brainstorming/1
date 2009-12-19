@@ -1,0 +1,41 @@
+04:48:48 <xsdg> basically, I'm working on an app which I hope will help me to find photos
+04:49:11 <xsdg> more generally, I hope this app will at some point help photographers in general to find their photos with 
+                less effort
+04:54:02 <Grissom> I see
+04:54:21 <Grissom> if you are planning to actually implement it, there are a lot of other things to consider...
+04:57:17 <xsdg> I am planning to actually implement it, though predominantly just by playing around with things, rather than 
+                as any sort of planned project
+04:58:32 <xsdg> a really important aspect that we only barely touched on is the UI.  We'll see how it goes :o)
+05:05:10 <Grissom> yes, that's what I meant -- if you just care about clustering images, it's one thing; if you want the user 
+                   to interactively organize them, that's another thing
+05:05:30 <Grissom> in the sense that the intuition is different and a different set of people work on it
+05:05:37 <xsdg> ::nod::
+05:06:22 <xsdg> care to hear my very preliminary UI design idea? ("no" is a fine answer)
+05:07:14 <Grissom> sure, ok
+05:08:50 <xsdg> So far, you've got a window, it's split 20/80 between an upper half and a lower half (respectively).  Each 
+                half shows a set.
+05:10:19 <xsdg> The lower half is some arbitrary set (how you find it, I'm not sure yet).  Assuming some ordering, you can 
+                split the set into two sets by clicking/double-clicking/something.  The top half is a "temporary" set, that 
+                you can add stuff to by clicking images from the set at the bottom
+05:10:28 <xsdg> so it's sort of a grab bag
+05:11:12 <xsdg> a premise of the UI is that users will create or interact with sets that are important.  If they split a set 
+                in half, the old set may not have been important, but the two new sets certainly are
+05:11:31 <xsdg> given that, it should be easier to get back to them somehow than other arbitrary sets
+05:12:16 <xsdg> similarly, if the user selects a couple photos from the set, that is inherently a new set ("selected photos" 
+                or somesuch).  This new set is captured in the temporary set at the top
+05:12:44 <xsdg> (that's it, so far).  Notably, this doesn't touch on tagging sets with a name or finding sets to manipulate or 
+                scan
+05:14:42 <Grissom> I'm not sure I understand what's the purpose of the top set and how you split your sets in half
+05:15:00 <Grissom> think about what flickr does
+05:15:11 <Grissom> the top part is the set you want to find
+05:15:35 <Grissom> the "important sets" you created in the past and on the side, with names, so you can refer to them easily
+05:15:50 <Grissom> the bottom part is where you drag images from to the top (target) set
+05:16:11 <Grissom> initially, you start with your entire collection at the bottom
+05:16:39 <Grissom> in the worst case, you just drag pics from bottom to top one by one
+05:17:00 <xsdg> Grissom: I think we're on the same page, but let's say I've got a set of "photos from yesterday" and I want to 
+                construct the set of "good photos from yesterday".  I would select pertinent photos from the bottom, they'd 
+                magicaly end up in the top, and then I'd name the top set "good photos from Friday" or something
+05:17:14 <Grissom> in the best case, after you dragged a couple, the system "gets" the pattern and filters the bottom part to 
+                   leave only what it thinks is relevant
+05:20:41  * xsdg nods
+05:20:49 <xsdg> that would be neat
